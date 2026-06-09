@@ -55,7 +55,7 @@
         <t t-else="">
 
             <div class="btn btn-primary w-100 fw-bold py-1">
-                <t t-esc="discount_info?.originalPriceFormatted || props.product.list_price" SR/>
+                <t t-esc="discount_info?.originalPriceFormatted || props.product.list_price"/>SR
             </div>
 
         </t>
