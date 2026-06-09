@@ -9,16 +9,14 @@
     <t t-set="discount_info" t-value="this.discountData"/>
 
     <!-- NAME MUST ALWAYS BE FIRST AND ALWAYS VISIBLE -->
-    <div class="product-name text-center fw-bold text-truncate mb-1">
-        <t t-esc="props.name"/>
-    </div>
+    
 
     <!-- BADGE (kept outside flow but NOT overlapping text) -->
     <t t-if="discount_info and discount_info.hasDiscount">
         <div class="position-absolute top-0 end-0 m-1">
             <span class="badge rounded-circle bg-danger"
                   style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;">
-                -<t t-esc="discount_info.discountPercentage"/>%
+                -<t t-esc="discount_info.discountPercentage"/>
             </span>
         </div>
     </t>
