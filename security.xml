@@ -1,0 +1,8 @@
+<odoo>
+    <record id="module_category_product_image_workflow" model="ir.module.category">
+        <field name="name">Product Image Workflow</field>
+        <field name="sequence">10</field>
+    </record>
+
+   
+</odoo>

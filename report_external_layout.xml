@@ -1,0 +1,82 @@
+<odoo>
+    <data>
+        <!-- 1. Create a new group for users with limited journal access -->
+        <record id="group_journal_limited" model="res.groups">
+            <field name="name">Limited Journal Access</field>
+          
+        </record>
+
+        <!-- 2. Add the record rule for this group -->
+        <record id="rule_user_allowed_journals" model="ir.rule">
+            <field name="name">Restrict Journals by User</field>
+            <field name="model_id" ref="account.model_account_journal"/>
+            <field name="groups" eval="[(4, ref('branch_warehouse_branding.group_journal_limited'))]"/>
+            <field name="domain_force">
+                 [
+            '|',
+            ('id', 'in', user.allowed_journal_ids.ids),
+           ('type', 'in', ( 'cash','bank'))
+        ]
+            </field>
+        </record>
+		
+		<record id="rule_user_allowed_move" model="ir.rule">
+            <field name="name">Restrict Account Moves by User</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="groups" eval="[(4, ref('branch_warehouse_branding.group_journal_limited'))]"/>
+            <field name="domain_force">
+                 [
+            
+            ('journal_id', 'in', user.allowed_journal_ids.ids)
+           
+        ]
+            </field>
+        </record>
+		
+		<record id="rule_user_allowed_move_line" model="ir.rule">
+            <field name="name">Restrict Account Moves Line by User</field>
+            <field name="model_id" ref="account.model_account_move_line"/>
+            <field name="groups" eval="[(4, ref('branch_warehouse_branding.group_journal_limited'))]"/>
+            <field name="domain_force">
+                 [
+            
+            ('journal_id', 'in', user.allowed_journal_ids.ids)
+           
+        ]
+            </field>
+        </record>
+		<record id="rule_partner_restricted_users" model="ir.rule">
+    <field name="name">Partner Restriction - Sales Users</field>
+    <field name="model_id" ref="base.model_res_partner"/>
+    <field name="groups" eval="[(4, ref('branch_warehouse_branding.group_journal_limited'))]"/>
+    <field name="domain_force">
+        [
+            '|','|','|','|',
+            
+            ('create_uid', '=', user.id),
+            ('category_id', 'in', user.allowed_journal_ids.mapped('x_customer_tag_ids').ids),
+            ('user_ids', '!=', False),
+            ('supplier_rank', '>', 0),
+            ('id', '=', user.company_id.partner_id.id)
+        ]
+    </field>
+</record>
+
+
+<record id="rule_user_partner_edit_own" model="ir.rule">
+    <field name="name">Partner: Edit Own Only</field>
+    <field name="model_id" ref="base.model_res_partner"/>
+    <field name="domain_force">[('create_uid','=',user.id)]</field>
+    <field name="perm_write" eval="True"/>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_unlink" eval="True"/>
+    <field name="groups" eval="[(4, ref('branch_warehouse_branding.group_journal_limited'))]"/>
+</record>
+
+
+
+
+
+		
+    </data>
+</odoo>
