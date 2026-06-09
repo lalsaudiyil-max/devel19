@@ -34,6 +34,8 @@ patch(ProductCard.prototype, {
         	return null;
     	}
 		const productLimit=productD?.discount_limit;
+		let originalPrice = product.list_price;
+		let currentPrice = product.getPrice(this.pos.config.pricelist_id, 1) ;
 		
 
     	let hasDiscount = false;
