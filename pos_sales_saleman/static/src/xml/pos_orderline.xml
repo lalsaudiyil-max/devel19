@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    
+    <t t-inherit="point_of_sale.ProductScreen" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('product-screen')]" position="inside">
+            <div class="global-salesman-floating-btn" 
+                 t-on-click="onSelectSalesman"
+                 style="position: absolute; bottom: 30px; right: 30px; z-index: 999; background: #008784; color: white; padding: 15px 25px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 10px;">
+                <i class="fa fa-users fa-lg"/>
+                <span style="font-weight: bold;">Assign Salesman</span>
+            </div>
+        </xpath>
+    </t>
+
+    <t t-inherit="point_of_sale.Orderline" t-inherit-mode="extension">
+        <xpath expr="//ul[hasclass('info-list')]" position="inside">
+            <li t-if="this.salesPersonName" class="salesman-info" style="color: #008784; font-weight: bold;">
+                <i class="fa fa-user-circle-o me-1"/>
+                <t t-esc="this.salesPersonName"/>
+            </li>
+        </xpath>
+    </t>
+
+</templates>

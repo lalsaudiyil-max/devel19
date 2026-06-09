@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    
+
+    <t t-name="pos_sales_saleman.OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('pt-3')]" position="after">
+            <t t-if="props.order.invoice_name">
+                <div class="pos-receipt-center-align" style="font-weight: bold; border-top: 1px dashed black; margin-top: 5px; padding-top: 5px;">
+                    INVOICE: <t t-esc="props.order.invoice_name"/>
+                </div>
+            </t>
+			<t t-if="props.order.partner">
+			<div class="customer-info" style="border-top: 1px solid black; margin-top: 5px; padding-top: 5px;">
+            <div>Customer: <t t-esc="props.order.partner.name"/></div>
+            <t t-if="props.order.partner.vat">
+                <div>VAT: <t t-esc="props.order.partner.vat"/></div>
+            </t>
+        </div>
+    </t>
+        </xpath>
+		<xpath expr="//ReceiptHeader" position="before">
+    <div class="d-flex justify-content-between pt-2">
+        <t t-if="props.order.logo">
+			<div class="pos-receipt-logo" style="text-align: center; margin-bottom: 10px;">
+                <img t-att-src="('/pos_sales_saleman/static/src/img/' + props.order.logo + '.jpg')" style="max-width: 150px; height: auto;"/>
+            </div>
+			
+		</t>
+
+        <t t-if="order.company.logo">
+            <img t-att-src="'data:image/png;base64,' + order.company.logo" style="max-height:50px;"/>
+        </t>
+    </div>
+</xpath>
+
+    </t>
+</templates>
+
+

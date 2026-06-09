@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="l10n_sa_invoice_payment_date_fix"
+                  inherit_id="l10n_sa.l10n_sa_report_invoice_document">
+
+            <xpath expr="//t[@t-out=&quot;payment_vals['date']&quot;]" position="replace">
+                <t t-out="payment_vals['date']"
+                   t-options="{'widget': 'date', 'format': 'yyyy-MM-dd'}"/>
+            </xpath>
+
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
+
+        <!-- ADD PRICING INSIDE PRODUCT CONTENT -->
+        <xpath expr="//div[hasclass('product-content')]" position="inside">
+
+    <t t-set="discount_info" t-value="this.discountData"/>
+
+    <!-- NAME MUST ALWAYS BE FIRST AND ALWAYS VISIBLE -->
+    <div class="product-name text-center fw-bold text-truncate mb-1">
+        <t t-esc="props.name"/>
+    </div>
+
+    <!-- BADGE (kept outside flow but NOT overlapping text) -->
+    <t t-if="discount_info and discount_info.hasDiscount">
+        <div class="position-absolute top-0 end-0 m-1">
+            <span class="badge rounded-circle bg-danger"
+                  style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;">
+                -<t t-esc="discount_info.discountPercentage"/>%
+            </span>
+        </div>
+    </t>
+
+    <!-- PRICES -->
+    <div class="text-center mt-auto w-100">
+
+        <t t-if="discount_info and discount_info.hasDiscount">
+
+            <div class="text-muted text-decoration-line-through small">
+                <t t-esc="discount_info.originalPriceFormatted"/>
+            </div>
+
+            <div class="btn btn-primary w-100 fw-bold py-1 mt-1">
+                <t t-esc="discount_info.currentPriceFormatted"/>
+            </div>
+
+        </t>
+
+        <t t-else="">
+
+            <div class="btn btn-primary w-100 fw-bold py-1">
+                <t t-esc="discount_info?.originalPriceFormatted || props.product.list_price"/>
+            </div>
+
+        </t>
+
+    </div>
+
+</xpath>
+
+    </t>
+
+</templates>

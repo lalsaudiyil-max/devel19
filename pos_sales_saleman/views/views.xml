@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_form_cashier_discount_limit" model="ir.ui.view">
+        <field name="name">hr.employee.form.cashier_discount_limit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="/form/sheet/notebook/page[@name='hr_settings']/group[@name='settings_group']/group[@name='identification_group']/div" position="after">
+                <field name="cashier_discount_limit" string="Cashier Discount Limit(%)"/>
+           </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_product_discount_limit_form" model="ir.ui.view">
+
+    <field name="name">
+        product.product.form.inherit.discount_limit
+    </field>
+
+    <field name="model">product.product</field>
+
+    <field name="inherit_id" ref="product.product_normal_form_view"/>
+
+    <field name="arch" type="xml">
+
+        <xpath expr="//field[@name='barcode']" position="after">
+
+            <field name="discount_limit" string="Discount Limit(%)"/>
+
+        </xpath>
+
+    </field>
+
+</record>
+</odoo>

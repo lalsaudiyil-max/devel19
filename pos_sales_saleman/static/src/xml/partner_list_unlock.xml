@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="point_of_sale.PartnerList" t-inherit-mode="extension">
+        
+        <xpath expr="//button[@title='Add a customer' and not(contains(@class, 'flex-fill'))]" position="attributes">
+            <attribute name="t-if">!ui.isSmall</attribute>
+        </xpath>
+
+        <xpath expr="//button[@title='Add a customer' and contains(@class, 'flex-fill')]" position="attributes">
+            <attribute name="t-if">ui.isSmall</attribute>
+        </xpath>
+
+    </t>
+	
+</templates>
