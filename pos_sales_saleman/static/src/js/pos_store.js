@@ -74,7 +74,7 @@ patch(ProductCard.prototype, {
 		}
 
 		// No active discount
-		if (product.discount_limit > 0) {
+		if (productLimit > 0) {
 
     		let listPrice = product.list_price;
 
