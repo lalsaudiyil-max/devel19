@@ -1,19 +1,21 @@
 {
-    'name': 'Product Image Workflow',
-    'version': '1.0',
-    'category': 'Inventory',
-    'summary': 'Warehouse photo capture and admin approval workflow',
-    'depends': ['product', 'stock', 'mail'],
-	"author": "Anvar Lal",
-    "website": "https://www.mosaco.com",
-    'data': [
-     #   'security/groups.xml',
-	#	'security/security.xml',
-        'security/ir.model.access.csv',
-        'views/product_image_request_views.xml',
-    ],
-    'installable': True,
-    'application': True,
+    "name": "POS Branding (Branch Logo & Screensaver)",
+    "version": "19.0.1.0.0",
+    "category": "Point of Sale",
+    "depends": ["point_of_sale"],
+    'author': 'Anvar Lal K H',
     'license': 'LGPL-3',
-
+    "data": [
+        "views/pos_config_views.xml",
+    ],
+    "assets": {
+        "point_of_sale._assets_pos": [
+            "pos_branch_branding/static/src/js/chrome_patch.js",
+            "pos_branch_branding/static/src/xml/navbar.xml",
+            "pos_branch_branding/static/src/xml/saver_screen.xml",
+            "pos_branch_branding/static/src/scss/branding.scss",
+        ],
+    },
+    "installable": True,
+    "application": False,
 }
