@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="point_of_sale.Navbar"
+       t-inherit-mode="extension">
+
+        <!-- Replace center logo -->
+        <xpath expr="//div[hasclass('pos-centerheader')]" position="replace">
+
+            <div class="pos-centerheader d-none d-xl-flex justify-content-center align-items-center gap-2 overflow-hidden">
+
+                <!-- Branch Logo -->
+                <img t-if="pos.config.branch_logo"
+                     t-att-src="'data:image/png;base64,' + pos.config.branch_logo"
+                     class="pos-branch-logo"/>
+
+                <!-- POS Name -->
+                <div class="fw-bold fs-5 text-dark">
+                    <t t-esc="pos.config.display_name"/>
+                </div>
+
+            </div>
+
+        </xpath>
+
+    </t>
+
+</templates>

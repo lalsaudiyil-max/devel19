@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="point_of_sale.LoginScreen" t-inherit-mode="extension">
+
+        <!-- CENTER POS NAME -->
+       
+
+         <xpath expr="//div[contains(@t-attf-class,'screen-login-logo')]/img"
+           position="after">
+        
+        <img t-if="this.pos.config.branch_logo"
+             t-att-src="'data:image/png;base64,' + this.pos.config.branch_logo"
+             alt="Branch Logo"/>
+             
+
+       
+         </xpath>
+    
+    </t>
+
+</templates>
