@@ -1,8 +1,0 @@
-@font-face {
-    font-family: 'Lato';
-    src: url('/branch_warehouse_branding/static/src/fonts/Lato-Regular.ttf') format('truetype');
-}
-
-body, .page {
-    font-family: 'Lato', sans-serif;
-}

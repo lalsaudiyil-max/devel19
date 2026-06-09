@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_stock_warehouse_branch,stock.warehouse.branch,stock.model_stock_warehouse,base.group_user,1,1,1,1
-access_account_journal_warehouse,account.journal.warehouse,account.model_account_journal,base.group_user,1,1,1,1
-access_res_users_journals,res.users.journals,base.model_res_users,base.group_system,1,1,1,1
