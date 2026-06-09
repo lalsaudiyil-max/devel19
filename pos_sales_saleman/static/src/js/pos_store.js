@@ -34,53 +34,69 @@ patch(ProductCard.prototype, {
         	return null;
     	}
 		const productLimit=productD?.discount_limit;
-		console.log(productLimit);
-		console.log(productD);
-		console.log(product);
-		console.log(this.props.productId);
-		console.log(this.props);
-
-    	let originalPrice = product.list_price;
-    	//let currentPrice = product.getPrice
-        //	? product.getPrice(this.pos.config.pricelist, 1)
-        //	: originalPrice;
-		let currentPrice = product.getPrice(this.pos.config.pricelist_id, 1) ;
 		
 
-    	if (originalPrice > currentPrice && currentPrice > 0) {
-        	const discountPercentage =
-            	((originalPrice - currentPrice) / originalPrice) * 100;
-			
-			
-        	if (typeof product.getTaxDetails === "function") {
-            	const taxDetailsOriginal =
-                	product.getTaxDetails(originalPrice);
-            	originalPrice =
-                	taxDetailsOriginal?.total_included || originalPrice;
-				
-				
+    	let hasDiscount = false;
+		let discountPercentage = 0;
 
+		if (originalPrice > currentPrice && currentPrice > 0) {
+    		hasDiscount = true;
 
-            	
-            	currentPrice= currentPrice * originalPrice/product.list_price;
-				
-				
-				
-				
-        	}
+    		discountPercentage =
+        		((originalPrice - currentPrice) / originalPrice) * 100;
 
-        	return {
-            	originalPriceFormatted:
-                	this.env.utils.formatCurrency(originalPrice),
-            	currentPriceFormatted:
-                	this.env.utils.formatCurrency(currentPrice),
-            	discountPercentage:
-                	Math.round(discountPercentage) + "%",
-            	hasDiscount: true,
-        	};
-    	}
+    		if (typeof product.getTaxDetails === "function") {
+        		const taxDetailsOriginal = product.getTaxDetails(originalPrice);
 
-    	return null;
+        		originalPrice =
+            		taxDetailsOriginal?.total_included || originalPrice;
+
+        		currentPrice =
+            		currentPrice * originalPrice / product.list_price;
+    		}
+
+    		return {
+        		originalPriceFormatted:
+            		this.env.utils.formatCurrency(originalPrice),
+
+        		currentPriceFormatted:
+            		this.env.utils.formatCurrency(currentPrice),
+
+        		discountPercentage:
+            		Math.round(discountPercentage) + "%",
+
+        		hasDiscount: true,
+
+        		showDiscountLimit: false,
+    		};
+		}
+
+		// No active discount
+		if (product.discount_limit > 0) {
+
+    		let listPrice = product.list_price;
+
+    		if (typeof product.getTaxDetails === "function") {
+        		const taxDetails = product.getTaxDetails(listPrice);
+        		listPrice = taxDetails?.total_included || listPrice;
+    		}
+
+    		return {
+        		originalPriceFormatted:
+            		this.env.utils.formatCurrency(listPrice),
+
+        		currentPriceFormatted:
+            		this.env.utils.formatCurrency(listPrice),
+
+        		discountLimit: productLimit,
+
+        		hasDiscount: false,
+
+        		showDiscountLimit: true,
+    		};
+		}
+
+		return null;
 	}
 });
 
