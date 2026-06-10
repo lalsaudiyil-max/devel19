@@ -1,0 +1,63 @@
+<odoo>
+    <record id="view_product_image_request_list" model="ir.ui.view">
+        <field name="name">product.image.request.list</field>
+        <field name="model">product.image.request</field>
+        <field name="arch" type="xml">
+            <list string="Image Requests" decoration-info="state == 'submitted'" decoration-success="state == 'approved'">
+                <field name="product_id"/>
+                <field name="product_barcode"/>
+                <field name="uploaded_by"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_product_image_request_form" model="ir.ui.view">
+        <field name="name">product.image.request.form</field>
+        <field name="model">product.image.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="Submit" invisible="state != 'draft'" class="btn-primary"/>
+                    <button name="action_approve" type="object" string="Approve" invisible="state != 'submitted'" groups="stock.group_stock_manager" class="btn-success"/>
+                    <button name="action_reject" type="object" string="Reject" invisible="state != 'submitted'" groups="stock.group_stock_manager" class="btn-danger"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Product Information">
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="product_barcode"/>
+                        </group>
+                        <group string="Capture Photo">
+                            <field name="image" widget="image" class="oe_avatar" options="{'accepted_file_extensions': 'image/*'}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_image_request_search" model="ir.ui.view">
+        <field name="name">product.image.request.search</field>
+        <field name="model">product.image.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="product_barcode"/>
+                <filter string="To Approve" name="to_approve" domain="[('state', '=', 'submitted')]"/>
+                <filter string="My Requests" name="my_requests" domain="[('uploaded_by', '=', uid)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_product_image_requests" model="ir.actions.act_window">
+        <field name="name">Product Image Requests</field>
+        <field name="res_model">product.image.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_image_workflow_root" name="Image Workflow" sequence="10"/>
+    <menuitem id="menu_image_request" name="Requests" parent="menu_image_workflow_root" action="action_product_image_requests"/>
+</odoo>

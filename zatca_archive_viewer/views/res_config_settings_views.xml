@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================== -->
+    <!-- SETTINGS VIEW -->
+    <!-- ================================================== -->
+
+    
+    <record id="action_zatca_archive_config_settings" model="ir.actions.act_window">
+        <field name="name">Configuration Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'module': 'zatca_archive_viewer'}</field>
+    </record>
+    
+    <record id="res_config_settings_view_form_zatca_archive" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.zatca.archive</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="100"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//form" position="inside">
+
+                <app string="ZATCA Archive"
+                     name="zatca_archive_viewer"
+                     data-key="zatca_archive_viewer">
+
+                    <block title="Legacy Archive Database">
+
+                        <setting string="Database Name">
+                            <field name="legacy_db_name"/>
+                        </setting>
+
+                        <setting string="Host / IP Address">
+                            <field name="legacy_db_host"/>
+                        </setting>
+
+                        <setting string="Port">
+                            <field name="legacy_db_port"/>
+                        </setting>
+
+                        <setting string="Username">
+                            <field name="legacy_db_user"/>
+                        </setting>
+
+                        <setting string="Password">
+                            <field name="legacy_db_password"
+                                   widget="password"/>
+                        </setting>
+
+                    </block>
+
+                </app>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ================================================== -->
+    <!-- SETTINGS ACTION -->
+    <!-- ================================================== -->
+
+
+    <!-- ================================================== -->
+    <!-- SETTINGS MENU -->
+    <!-- ================================================== -->
+
+    <menuitem id="menu_zatca_archive_settings"
+              name="Settings"
+              parent="menu_zatca_archive_configuration"
+              action="action_zatca_archive_config_settings"
+              sequence="10"/>
+
+</odoo>

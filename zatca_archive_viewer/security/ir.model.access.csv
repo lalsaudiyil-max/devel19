@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_zatca_archive,access.zatca.archive,model_zatca_archive_invoice,base.group_user,1,1,1,0
+access_zatca_archive_import_wizard,access.zatca.archive.import.wizard,model_zatca_import_wizard,base.group_user,1,1,1,0
+access_zatca_line,access.zatca.line,model_zatca_archive_line,base.group_user,1,1,1,0

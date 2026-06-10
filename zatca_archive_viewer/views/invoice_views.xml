@@ -1,0 +1,203 @@
+<odoo>
+    <!-- ================================================== -->
+    <!-- LIST VIEW -->
+    <!-- ================================================== -->
+    <record id="view_zatca_archive_invoice_list" model="ir.ui.view">
+        <field name="name">zatca.archive.invoice.list</field>
+        <field name="model">zatca.archive.invoice</field>
+        <field name="arch" type="xml">
+            <list string="ZATCA Archive" create="false">
+                <field name="invoice_date"/>
+                <field name="name"/>
+                <field name="customer_name"/>
+                <field name="customer_phone"/>
+                <field name="customer_vat"/>
+                <field name="sales_team"/>
+                <field name="salesperson"/>
+                <field name="zatca_uuid"/>
+                <field name="amount_total"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================== -->
+    <!-- SEARCH VIEW -->
+    <!-- ================================================== -->
+    <record id="view_zatca_archive_invoice_search" model="ir.ui.view">
+        <field name="name">zatca.archive.invoice.search</field>
+        <field name="model">zatca.archive.invoice</field>
+        <field name="arch" type="xml">
+            <search string="Search Archive">
+                <field name="name"/>
+                <field name="customer_name"/>
+                <field name="customer_phone"/>
+                <field name="customer_vat"/>
+                <field name="zatca_uuid"/>
+                <separator/>
+                <filter string="Invoices" name="filter_invoice" domain="[('move_type','=','out_invoice')]"/>
+                <filter string="Credit Notes" name="filter_refund" domain="[('move_type','=','out_refund')]"/>
+                <filter string="Posted" name="filter_posted" domain="[('state','=','posted')]"/>
+                <filter string="Cancelled" name="filter_cancelled" domain="[('state','=','cancel')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- ================================================== -->
+    <!-- SERVER ACTION -->
+    <!-- ================================================== -->
+    <record id="action_trigger_odoo14_import" model="ir.actions.server">
+        <field name="name">Run Odoo 14 Archive Import</field>
+        <field name="model_id" ref="zatca_archive_viewer.model_zatca_archive_invoice"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.import_from_odoo14()
+        </field>
+    </record>
+
+    <!-- ================================================== -->
+    <!-- FORM VIEW -->
+    <!-- ================================================== -->
+    <record id="view_zatca_archive_invoice_form" model="ir.ui.view">
+        <field name="name">zatca.archive.invoice.form</field>
+        <field name="model">zatca.archive.invoice</field>
+        <field name="arch" type="xml">
+            <form string="ZATCA Archive" create="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="invoice_date"/>
+                            <field name="move_type"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="amount_untaxed"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_total"/>
+                            <field name="amount_discount"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Customer">
+                            <group>
+                                <group>
+                                    <field name="customer_name"/>
+                                    <field name="customer_vat"/>
+                                    <field name="customer_phone"/>
+                                    <field name="customer_mobile"/>
+                                    <field name="customer_email"/>
+                                </group>
+                                <group>
+                                    <field name="customer_country"/>
+                                    <field name="customer_city"/>
+                                    <field name="customer_street"/>
+                                    <field name="customer_street2"/>
+                                    <field name="customer_zip"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Seller">
+                            <group>
+                                <group>
+                                    <field name="seller_name"/>
+                                    <field name="seller_vat"/>
+                                    <field name="seller_phone"/>
+                                    <field name="seller_email"/>
+                                </group>
+                                <group>
+                                    <field name="seller_country"/>
+                                    <field name="seller_city"/>
+                                    <field name="seller_street"/>
+                                    <field name="seller_street2"/>
+                                    <field name="seller_zip"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Sales">
+                            <group>
+                                <group>
+                                    <field name="company_name"/>
+                                    <field name="branch_name"/>
+                                </group>
+                                <group>
+                                    <field name="sales_team"/>
+                                    <field name="salesperson"/>
+                                    <field name="journal_name"/>
+                                    <field name="currency_name"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="ZATCA">
+                            <group>
+                                <group>
+                                    <field name="zatca_uuid"/>
+                                    <field name="zatca_invoice_hash"/>
+                                    <field name="zatca_previous_hash"/>
+                                </group>
+                                <group>
+                                    <field name="zatca_status"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="zatca_qr"/>
+                            </group>
+                        </page>
+
+                        <page string="Lines">
+                            <field name="line_ids" nolabel="1">
+                                <list create="false">
+                                    <field name="name"/>
+                                    <field name="default_code"/>
+                                    <field name="barcode"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="discount_percent"/>
+                                    <field name="tax_percent"/>
+                                    <field name="line_total"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+              <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================== -->
+    <!-- WINDOW ACTIONS -->
+    <!-- ================================================== -->
+    <record id="action_zatca_archive_invoice" model="ir.actions.act_window">
+        <field name="name">ZATCA Archive</field>
+        <field name="res_model">zatca.archive.invoice</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_zatca_archive_invoice_search"/>
+    </record>
+
+  
+    <record id="action_report_zatca_archive_print" model="ir.actions.report">
+        <field name="name">ZATCA Hybrid Archive PDF</field>
+        <field name="model">zatca.archive.invoice</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">zatca_archive_viewer.report_archive_document</field>
+        <field name="report_file">zatca_archive_viewer.report_archive_document</field>
+        <field name="binding_model_id" ref="model_zatca_archive_invoice"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ================================================== -->
+    <!-- MENUS -->
+    <!-- ================================================== -->
+    <menuitem id="menu_zatca_archive_root" name="ZATCA Archive" sequence="90"/>
+    <menuitem id="menu_zatca_archive_invoice" name="Invoices" parent="menu_zatca_archive_root" action="action_zatca_archive_invoice" sequence="10"/>
+    <menuitem id="menu_zatca_import" name="Import Invoices" parent="menu_zatca_archive_root" action="action_trigger_odoo14_import" sequence="20"/>
+    
+    <!-- Configuration Dropdown Setup -->
+    <menuitem id="menu_zatca_archive_configuration" name="Configuration" parent="menu_zatca_archive_root" sequence="50"/>
+    
+</odoo>

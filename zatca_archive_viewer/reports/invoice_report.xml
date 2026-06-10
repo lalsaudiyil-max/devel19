@@ -1,0 +1,542 @@
+<odoo>
+
+<template id="report_zatca_archive_document">
+
+    <t t-call="web.html_container">
+
+        <t t-foreach="docs" t-as="o">
+
+            <t t-call="web.external_layout">
+
+                <div class="page">
+
+                    <!-- HEADER -->
+                    <h2 style="text-align:center;">
+                        ZATCA Archived Invoice
+                    </h2>
+
+                    <hr/>
+
+                    <!-- INFO BLOCK -->
+                    <div class="row">
+
+                        <div class="col-6">
+
+                            <strong>Invoice:</strong>
+                            <span t-esc="o.name"/><br/>
+
+                            <strong>Date:</strong>
+                            <span t-esc="o.invoice_date"/><br/>
+
+                            <strong>Journal:</strong>
+                            <span t-esc="o.journal_name"/><br/>
+
+                            <strong>Currency:</strong>
+                            <span t-esc="o.currency_name"/>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <strong>Customer:</strong>
+                            <span t-esc="o.customer_name"/><br/>
+
+                            <strong>VAT:</strong>
+                            <span t-esc="o.customer_vat"/><br/>
+
+                            <strong>Email:</strong>
+                            <span t-esc="o.customer_email"/><br/>
+
+                            <strong>Phone:</strong>
+                            <span t-esc="o.customer_mobile"/>
+
+                        </div>
+
+                    </div>
+
+                    <hr/>
+
+                    <!-- CUSTOMER ADDRESS -->
+                    <div>
+
+                        <strong>Billing Address</strong><br/>
+
+                        <span t-esc="o.customer_street"/> 
+                        <span t-esc="o.customer_street2"/><br/>
+
+                        <span t-esc="o.customer_city"/>
+                        <span t-esc="o.customer_zip"/><br/>
+
+                        <span t-esc="o.customer_country"/>
+
+                    </div>
+
+                    <hr/>
+
+                    <!-- LINES -->
+                    <table class="table table-sm o_main_table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Description</th>
+                                <th class="text-end">Qty</th>
+                                <th class="text-end">Unit Price</th>
+                                <th class="text-end">Discount</th>
+                                <th class="text-end">Sub Total</th>
+                                 <th class="text-end">Total</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <t t-foreach="o.line_ids" t-as="l">
+
+                                <tr>
+
+                                    <td>
+                                        <span t-esc="l.product_name"/>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span t-esc="l.quantity"/>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span t-esc="l.unit_price"/>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span t-esc="l.discount_amount"/>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span t-esc="l.line_subtotal"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="l.line_total"/>
+                                    </td>
+
+                                </tr>
+
+                            </t>
+
+                        </tbody>
+
+                    </table>
+
+                    <hr/>
+
+                    <!-- TOTALS -->
+                    <table class="table table-sm">
+
+                        <tr>
+                            <th>Untaxed Amount</th>
+                            <td class="text-end">
+                                <span t-esc="o.amount_untaxed"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Tax</th>
+                            <td class="text-end">
+                                <span t-esc="o.amount_tax"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Total</th>
+                            <td class="text-end">
+                                <strong>
+                                    <span t-esc="o.amount_total"/>
+                                </strong>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Discount</th>
+                            <td class="text-end">
+                                <span t-esc="o.amount_discount"/>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    <hr/>
+
+                    <!-- ZATCA SECTION -->
+                    <div>
+
+                        <strong>ZATCA UUID:</strong>
+                        <span t-esc="o.zatca_uuid"/><br/>
+
+                        <strong>Invoice Hash:</strong>
+                        <span t-esc="o.zatca_invoice_hash"/><br/>
+
+                        <strong>Previous Hash:</strong>
+                        <span t-esc="o.zatca_previous_hash"/><br/>
+
+                        <strong>Status:</strong>
+                        <span t-esc="o.zatca_status"/>
+
+                    </div>
+
+                    <!-- QR -->
+                    <div t-if="o.l10n_sa_qr_code_str" class="text-center my-3">
+                        <img t-att-src="'/report/barcode/?barcode_type=QR&amp;value=' + quote_plus(o.l10n_sa_qr_code_str) + '&amp;width=180&amp;height=180'" 
+                             style="width: 150px; height: 150px;" 
+                             alt="ZATCA Compliant QR Code"/>
+                    </div>
+
+                </div>
+
+            </t>
+
+        </t>
+
+    </t>
+
+</template>
+
+   <template id="report_archive_working_document">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.basic_layout">
+                
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap');
+                    
+                    /* Force uniform typography parameters globally across rendering matrices */
+                    .zatca_compliant_page {
+                        font-family: 'Inter', sans-serif !important;
+                        color: #2c3e50;
+                        font-size: 13px;
+                        line-height: 1.5;
+                    }
+                    .style_card {
+                        background-color: #f8fafc; 
+                        border: 1px solid #e2e8f0; 
+                        border-radius: 6px; 
+                        min-height: 125px;
+                    }
+                </style>
+                
+                <div class="page zatca_compliant_page">
+                    
+                    <t t-set="seller" t-value="xml_data.get(o.id, {})"/>
+
+                    <div class="row border-bottom pb-3 mb-4" style="border-color: #cbd5e1 !important;">
+                        <div class="col-7">
+                            <h3 style="color: #1e3a8a; font-weight: 700; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <span t-out="seller.get('name')"/>
+                            </h3>
+                            <div style="color: #475569; font-size: 12px; line-height: 1.4;">
+                                <strong>Address: </strong>
+                                <span t-if="seller.get('building')" t-out="seller.get('building')"/> 
+                                <span t-if="seller.get('street')" t-out="seller.get('street')"/>, 
+                                <span t-if="seller.get('city')" t-out="seller.get('city')"/> 
+                                <span t-if="seller.get('zip')" t-out="seller.get('zip')"/>
+                                <br/>
+                                <t t-if="seller.get('vat')">
+                                    <strong>Seller VAT ID: </strong> <span t-out="seller.get('vat')"/>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="col-5 text-end d-flex flex-column justify-content-center">
+                            <h2 style="color: #1e3a8a; font-weight: 800; margin: 0; font-size: 20px;">
+                                <t t-if="str(o.zatca_status or '').lower() == 'cleared'">TAX INVOICE</t>
+                                <t t-elif="str(o.zatca_status or '').lower() == 'reported'">SIMPLIFIED TAX INVOICE</t>
+                                <t t-else="">ZATCA ARCHIVED INVOICE</t>
+                            </h2>
+                            <p class="text-muted" style="margin: 4px 0 0 0; font-size: 11px; font-weight: 500;">
+                                Status: <span t-field="o.zatca_status"/>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <div class="p-3 style_card">
+                                <h6 style="color: #1e3a8a; font-weight: 700; margin-top: 0; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">Invoice Metadata</h6>
+                                <table class="w-100" style="font-size: 12px; line-height: 1.6;">
+                                    <tr><td class="text-muted" style="width: 35%;">Reference:</td><td><strong t-field="o.name"/></td></tr>
+                                    <tr><td class="text-muted">Issue Date:</td><td><span t-field="o.invoice_date"/></td></tr>
+                                    <tr><td class="text-muted">Journal:</td><td><span t-field="o.journal_name"/></td></tr>
+                                    <tr><td class="text-muted">Currency:</td><td><span t-field="o.currency_name"/></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 style_card">
+                                <h6 style="color: #1e3a8a; font-weight: 700; margin-top: 0; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">Customer / Buyer Info</h6>
+                                <div style="font-size: 12px; line-height: 1.4;">
+                                    <strong><span t-field="o.customer_name"/></strong><br/>
+                                    <span t-if="o.customer_vat" class="d-block text-muted">VAT: <span t-field="o.customer_vat"/></span>
+                                    
+                                    <div class="mt-1 text-secondary" style="font-size: 11px;">
+                                        <span t-if="o.customer_street" t-field="o.customer_street"/> <span t-if="o.customer_street2" t-field="o.customer_street2"/>
+                                        <span class="d-block"><span t-if="o.customer_city" t-field="o.customer_city"/> <span t-if="o.customer_zip" t-field="o.customer_zip"/></span>
+                                        <span t-if="o.customer_country" t-field="o.customer_country"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm mb-4" style="border-color: #e2e8f0 !important; font-size: 12px;">
+                        <thead style="background-color: #f1f5f9; color: #1e3a8a;">
+                            <tr>
+                                <th class="p-2" style="font-weight: 700;">Description</th>
+                                <th class="p-2 text-end" style="font-weight: 700; width: 8%;">Qty</th>
+                                <th class="p-2 text-end" style="font-weight: 700; width: 15%;">Unit Price</th>
+                                <th class="p-2 text-end" style="font-weight: 700; width: 12%;">Discount</th>
+                                <th class="p-2 text-end" style="font-weight: 700; width: 15%;">Sub Total</th>
+                                <th class="p-2 text-end" style="font-weight: 700; width: 15%;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.line_ids" t-as="l">
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td class="p-2"><span t-field="l.product_name"/></td>
+                                    <td class="p-2 text-end"><span t-field="l.quantity"/></td>
+                                    <td class="p-2 text-end"><span t-field="l.unit_price"/></td>
+                                    <td class="p-2 text-end"><span t-field="l.discount_amount"/></td>
+                                    <td class="p-2 text-end"><span t-field="l.line_subtotal"/></td>
+                                    <td class="p-2 text-end" style="font-weight: 600;"><span t-field="l.line_total"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <div class="row mb-4" style="page-break-inside: avoid;">
+                        <div class="col-7 d-flex align-items-center justify-content-center">
+                            <t t-if="seller.get('qr_url')">
+                                <div style="display: inline-block; padding: 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;" class="text-center">
+                                    <img t-att-src="seller.get('qr_url')" 
+                                         style="max-height: 130px; max-width: 130px; display: block; margin: 0 auto;"
+                                         alt="ZATCA Compliant QR Code"/>
+                                    <span class="text-muted d-block mt-2" style="font-size: 9px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; color: #64748b;">ZATCA Crypto Verified QR</span>
+                                </div>
+                            </t>
+                        </div>
+                        
+                        <div class="col-5">
+                            <table class="table table-sm table-borderless" style="font-size: 12px; line-height: 1.8;">
+                                <tr class="border-bottom" style="border-color: #f1f5f9 !important;">
+                                    <td class="text-muted">Untaxed Amount:</td>
+                                    <td class="text-end"><span t-field="o.amount_untaxed"/></td>
+                                </tr>
+                                <tr class="border-bottom" style="border-color: #f1f5f9 !important;">
+                                    <td class="text-muted">Tax Value:</td>
+                                    <td class="text-end"><span t-field="o.amount_tax"/></td>
+                                </tr>
+                                <tr style="font-size: 14px; color: #1e3a8a;">
+                                    <td><strong>Total:</strong></td>
+                                    <td class="text-end"><strong><span t-field="o.amount_total"/></strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="p-3 style_audit" style="background-color: #fafafa; border: 1px solid #f1f5f9; border-radius: 4px; font-size: 10px; color: #64748b; line-height: 1.5; page-break-inside: avoid;">
+                        <span class="d-block"><b>UUID:</b> <span t-field="o.zatca_uuid"/></span>
+                        <span class="d-block" style="word-break: break-all;"><b>Invoice Hash:</b> <span t-field="o.zatca_invoice_hash"/></span>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+<template id="report_archive_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    
+                    <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&amp;display=swap');
+                        
+                        .zatca_compliant_page {
+                            font-family: 'Cairo', sans-serif !important;
+                            color: #2c3e50;
+                            font-size: 13px;
+                            line-height: 1.6;
+                        }
+                        .style_card {
+                            background-color: #f8fafc; 
+                            border: 1px solid #e2e8f0; 
+                            border-radius: 6px; 
+                            min-height: 135px;
+                        }
+                        .ar_text {
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: #475569;
+                        }
+                    </style>
+                    
+                    <div class="page zatca_compliant_page">
+                        
+                        <t t-set="seller" t-value="xml_data.get(o.id, {})"/>
+
+                        <div class="row border-bottom pb-3 mb-4" style="border-color: #cbd5e1 !important;">
+                            <div class="col-6">
+                                <h3 style="color: #1e3a8a; font-weight: 700; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <span t-out="seller.get('name')"/>
+                                </h3>
+                                <div style="color: #475569; font-size: 12px; line-height: 1.5;">
+                                    <strong>Address / العنوان:</strong><br/>
+                                    <span t-if="seller.get('building')" t-out="seller.get('building')"/> 
+                                    <span t-if="seller.get('street')" t-out="seller.get('street')"/>, 
+                                    <span t-if="seller.get('city')" t-out="seller.get('city')"/> 
+                                    <span t-if="seller.get('zip')" t-out="seller.get('zip')"/>
+                                    <br/>
+                                    <t t-if="seller.get('vat')">
+                                        <strong>Seller VAT ID / الرقم الضريبي للمورد:</strong> <br/>
+                                        <span t-out="seller.get('vat')"/>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6 text-end d-flex flex-column justify-content-center">
+                                <h2 style="color: #1e3a8a; font-weight: 800; margin: 0; font-size: 21px; line-height: 1.4;">
+                                    <t t-if="str(o.zatca_status or '').lower() == 'cleared'">
+                                        فاتورة ضريبية
+                                        <span class="d-block text-muted" style="font-size: 14px; font-weight: 600; letter-spacing: 0.5px;">TAX INVOICE</span>
+                                    </t>
+                                    <t t-elif="str(o.zatca_status or '').lower() == 'reported'">
+                                        فاتورة ضريبية مبسطة
+                                        <span class="d-block text-muted" style="font-size: 14px; font-weight: 600; letter-spacing: 0.5px;">SIMPLIFIED TAX INVOICE</span>
+                                    </t>
+                                    <t t-else="">
+                                        وثيقة أرشيف زاتكا
+                                        <span class="d-block text-muted" style="font-size: 14px; font-weight: 600; letter-spacing: 0.5px;">ZATCA ARCHIVED DOCUMENT</span>
+                                    </t>
+                                </h2>
+                                <p class="text-muted" style="margin: 6px 0 0 0; font-size: 11px; font-weight: 700;">
+                                    Status / الحالة: <span class="badge rounded-all bg-light text-dark border px-2 py-1" t-field="o.zatca_status"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <div class="p-3 style_card">
+                                    <h6 style="color: #1e3a8a; font-weight: 700; margin-top: 0; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">
+                                        <span class="float-end ar_text">بيانات الفاتورة</span>
+                                        Invoice Metadata
+                                    </h6>
+                                    <table class="w-100" style="font-size: 12px; line-height: 1.8;">
+                                        <tr><td class="text-muted" style="width: 45%;">Ref / الرقم:</td><td><strong t-field="o.name"/></td></tr>
+                                        <tr><td class="text-muted">Date / التاريخ:</td><td><span t-field="o.invoice_date"/></td></tr>
+                                        <tr><td class="text-muted">Journal / الدفتر:</td><td><span t-field="o.journal_name"/></td></tr>
+                                        <tr><td class="text-muted">Currency / العملة:</td><td><span t-field="o.currency_name"/></td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 style_card">
+                                    <h6 style="color: #1e3a8a; font-weight: 700; margin-top: 0; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">
+                                        <span class="float-end ar_text">بيانات العميل</span>
+                                        Customer / Buyer Info
+                                    </h6>
+                                    <div style="font-size: 12px; line-height: 1.5;">
+                                        <strong><span t-field="o.customer_name"/></strong><br/>
+                                        <span t-if="o.customer_vat" class="d-block text-muted">VAT / الرقم الضريبي: <span t-field="o.customer_vat"/></span>
+                                        
+                                        <div class="mt-2" style="font-size: 12px; line-height: 1.5; color: #475569;">
+                                            <span t-if="o.customer_street" t-field="o.customer_street"/> 
+                                            <span t-if="o.customer_street2" t-field="o.customer_street2"/>
+                                            <span class="d-block" style="font-weight: 500;">
+                                                <span t-if="o.customer_city" t-field="o.customer_city"/> 
+                                                <span t-if="o.customer_zip" t-field="o.customer_zip"/>
+                                            </span>    
+                                            <span t-if="o.customer_country" t-field="o.customer_country" style="text-transform: uppercase; font-size: 11px; color: #64748b; font-weight: 600; display: block; mt-1;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-sm mb-4" style="border-color: #e2e8f0 !important; font-size: 12px;">
+                            <thead style="background-color: #f1f5f9; color: #1e3a8a; line-height: 1.3;">
+                                <tr>
+                                    <th class="p-2" style="font-weight: 700;">Description<br/><span style="font-size:10px; font-weight:500; color:#475569;">الوصف</span></th>
+                                    <th class="p-2 text-end" style="font-weight: 700; width: 10%;">Qty<br/><span style="font-size:10px; font-weight:500; color:#475569;">الكمية</span></th>
+                                    <th class="p-2 text-end" style="font-weight: 700; width: 15%;">Unit Price<br/><span style="font-size:10px; font-weight:500; color:#475569;">سعر الوحدة</span></th>
+                                    <th class="p-2 text-end" style="font-weight: 700; width: 12%;">Discount<br/><span style="font-size:10px; font-weight:500; color:#475569;">الخصم</span></th>
+                                    <th class="p-2 text-end" style="font-weight: 700; width: 15%;">Subtotal<br/><span style="font-size:10px; font-weight:500; color:#475569;">المبلغ الخاضع</span></th>
+                                    <th class="p-2 text-end" style="font-weight: 700; width: 15%;">Total<br/><span style="font-size:10px; font-weight:500; color:#475569;">المجموع</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.line_ids" t-as="l">
+                                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                                        <td class="p-2" style="padding-top: 6px !important; padding-bottom: 6px !important;"><span t-field="l.product_name"/></td>
+                                        <td class="p-2 text-end"><span t-field="l.quantity"/></td>
+                                        <td class="p-2 text-end"><span t-field="l.unit_price"/></td>
+                                        <td class="p-2 text-end"><span t-field="l.discount_amount"/></td>
+                                        <td class="p-2 text-end"><span t-field="l.line_subtotal"/></td>
+                                        <td class="p-2 text-end" style="font-weight: 600;"><span t-field="l.line_total"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <div class="row mb-4" style="page-break-inside: avoid;">
+                            <div class="col-6 d-flex align-items-center justify-content-center">
+                                <t t-if="seller.get('qr_url')">
+                                    <div style="display: inline-block; padding: 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;" class="text-center">
+                                        <img t-att-src="seller.get('qr_url')" 
+                                             style="max-height: 130px; max-width: 130px; display: block; margin: 0 auto;"
+                                             alt="ZATCA Compliant QR Code"/>
+                                        <span class="text-muted d-block mt-2" style="font-size: 9px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; color: #64748b;">رمز استجابة سريع معتمد</span>
+                                    </div>
+                                </t>
+                            </div>
+                            
+                            <div class="col-6 text-end">
+                                <table class="table table-sm table-borderless" style="font-size: 12px; line-height: 2.0; width:100%;">
+                                    <tr class="border-bottom" style="border-color: #f1f5f9 !important;">
+                                        <td class="text-start text-muted" style="font-size:11px;">Untaxed Amount / المبلغ الخاضع للضريبة:</td>
+                                        <td class="text-end" style="font-weight: 500;"><span t-field="o.amount_untaxed"/></td>
+                                    </tr>
+                                    <tr class="border-bottom" style="border-color: #f1f5f9 !important;">
+                                        <td class="text-start text-muted" style="font-size:11px;">Tax Value / قيمة الضريبة:</td>
+                                        <td class="text-end" style="font-weight: 500;"><span t-field="o.amount_tax"/></td>
+                                    </tr>
+                                    <tr style="font-size: 15px; color: #1e3a8a; background-color: #f8fafc;">
+                                        <td class="text-start" style="padding: 6px;"><strong>Total / المجموع الإجمالي:</strong></td>
+                                        <td class="text-end" style="padding: 6px;"><strong><span t-field="o.amount_total"/></strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="p-3 style_audit" style="background-color: #fafafa; border: 1px solid #f1f5f9; border-radius: 4px; font-size: 10px; color: #64748b; line-height: 1.6; page-break-inside: avoid;">
+                            <span class="d-block"><b>Cryptographic UUID / المعرف الفريد للفاتورة:</b> <span t-field="o.zatca_uuid"/></span>
+                            <span class="d-block" style="word-break: break-all;"><b>Invoice Hash / بصمة الفاتورة الكودية:</b> <span t-field="o.zatca_invoice_hash"/></span>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- REPORT ACTION -->
+   <record id="action_report_zatca_archive" model="ir.actions.report">
+    <field name="name">ZATCA Archive Invoice PDF</field>
+    <field name="model">zatca.archive.invoice</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">zatca_archive_viewer.report_archive_document</field>
+    <field name="report_file">zatca_archive_viewer.report_archive_document</field>
+    <field name="print_report_name">object.name.replace('/', '-')</field>
+    <field name="binding_model_id" ref="model_zatca_archive_invoice"/>
+    <field name="binding_type">report</field>
+</record>
+
+</odoo>
