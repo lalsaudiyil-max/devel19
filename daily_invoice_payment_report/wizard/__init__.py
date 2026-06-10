@@ -1,0 +1,1 @@
+from . import daily_invoice_payment_wizard
