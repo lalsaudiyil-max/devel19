@@ -60,7 +60,7 @@ patch(ProductCard.prototype, {
         this.pos = usePos(); 
     },
 
-    
+
 
 	get discountData() {
   		const productD =
@@ -68,59 +68,81 @@ patch(ProductCard.prototype, {
         	?.get(this.props.productId)
         	?.product_variant_ids?.[0];
 		const product = this.props.product;
-		
+
 
     	if (!product) {
         	return null;
     	}
 		const productLimit=productD?.discount_limit;
-		
-
-    	let originalPrice = product.list_price;
-    	//let currentPrice = product.getPrice
-        //	? product.getPrice(this.pos.config.pricelist, 1)
-        //	: originalPrice;
+		let originalPrice = product.list_price;
 		let currentPrice = product.getPrice(this.pos.config.pricelist_id, 1) ;
-		
-
-    	if (originalPrice > currentPrice && currentPrice > 0) {
-        	const discountPercentage =
-            	((originalPrice - currentPrice) / originalPrice) * 100;
-			
-			
-        	if (typeof product.getTaxDetails === "function") {
-            	const taxDetailsOriginal =
-                	product.getTaxDetails(originalPrice);
-            	originalPrice =
-                	taxDetailsOriginal?.total_included || originalPrice;
-				
-				
 
 
-            	
-            	currentPrice= currentPrice * originalPrice/product.list_price;
-				
-				
-				
-				
-        	}
+    	let hasDiscount = false;
+		let discountPercentage = 0;
 
-        	return {
-            	originalPriceFormatted:
-                	this.env.utils.formatCurrency(originalPrice),
-            	currentPriceFormatted:
-                	this.env.utils.formatCurrency(currentPrice),
-            	discountPercentage:
-                	Math.round(discountPercentage) + "%",
-            	hasDiscount: true,
-        	};
-    	}
+		if (originalPrice > currentPrice && currentPrice > 0) {
+    		hasDiscount = true;
 
-    	return null;
+    		discountPercentage =
+        		((originalPrice - currentPrice) / originalPrice) * 100;
+
+    		if (typeof product.getTaxDetails === "function") {
+        		const taxDetailsOriginal = product.getTaxDetails(originalPrice);
+
+        		originalPrice =
+            		taxDetailsOriginal?.total_included || originalPrice;
+
+        		currentPrice =
+            		currentPrice * originalPrice / product.list_price;
+    		}
+
+    		return {
+        		originalPriceFormatted:
+            		this.env.utils.formatCurrency(originalPrice),
+
+        		currentPriceFormatted:
+            		this.env.utils.formatCurrency(currentPrice),
+
+        		discountPercentage:
+            		Math.round(discountPercentage) + "%",
+
+        		hasDiscount: true,
+
+        		showDiscountLimit: false,
+    		};
+		}
+
+		// No active discount
+		if (productLimit > 0) {
+
+    		let listPrice = product.list_price;
+
+    		if (typeof product.getTaxDetails === "function") {
+        		const taxDetails = product.getTaxDetails(listPrice);
+        		listPrice = taxDetails?.total_included || listPrice;
+    		}
+
+    		return {
+        		originalPriceFormatted:
+            		this.env.utils.formatCurrency(listPrice),
+
+        		currentPriceFormatted:
+            		this.env.utils.formatCurrency(listPrice),
+
+        		discountLimit: productLimit,
+
+        		hasDiscount: false,
+
+        		showDiscountLimit: true,
+    		};
+		}
+
+		return null;
 	}
 });
 
-	
+
 
 patch(ProductScreen.prototype, {
 
