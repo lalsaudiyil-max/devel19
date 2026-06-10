@@ -73,8 +73,7 @@ patch(ProductCard.prototype, {
 
         		
     		}
-		return 	originalPriceFormatted:
-            		this.env.utils.formatCurrency(originalPrice);
+		return 	originalPriceFormatted = this.env.utils.formatCurrency(originalPrice);
 		
 
 	},
