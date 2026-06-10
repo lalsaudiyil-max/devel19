@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="warehouse_branded_header_bubble"
+                  inherit_id="web.external_layout_bubble">
+
+            <xpath expr="//div[contains(@t-attf-class,'header')]//table//tr" position="inside">
+             <td style="width:30px;"/>
+                <td class="p-0 pe-2 align-top" style="padding-left:20px;">
+                     <t t-if="o and o._name == 'account.move'">
+                    <div t-set="warehouse" t-value="o.journal_id.warehouse_id if o and o.journal_id else None"/>
+                    <t t-if="warehouse">
+                        <div style="font-size:14px;">
+                            <t t-if="warehouse.branch_logo">
+                                <img t-att-src="image_data_uri(warehouse.branch_logo)" style="max-height:40px;" alt="Branch Logo"/>
+                            </t>
+                            <t t-if="warehouse.branch_address">
+                                <div t-field="warehouse.branch_address" class="mt-1"/>
+                            </t>
+                        </div>
+                    </t>
+                    </t>
+                </td>
+            </xpath>
+
+        </template>
+    
+
+    </data>
+</odoo>

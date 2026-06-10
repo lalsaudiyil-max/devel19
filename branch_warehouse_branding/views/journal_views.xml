@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_account_journal_form_inherit" model="ir.ui.view">
+            <field name="name">account.journal.form.inherit</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="warehouse_id" invisible="type != 'sale'"/>
+                </xpath>
+              <xpath expr="/form//page[@name='zatca_einvoicing']" position="after">
+                    <page string="Branch Settings" name="studio_page_36q_1jkndar98" groups="base.group_system">
+                      <group name="studio_group_36q">
+                        <group name="studio_group_36q_left">
+                          <field name="x_analytic_account_id"/>
+                          <field name="x_team_id"/>
+                          <field name="x_customer_tag_ids" widget="many2many_tags"/>
+                        </group>
+                        <group name="studio_group_36q_right">
+                      <field name="x_not_available_pricelist_ids" widget="many2many_tags"/>
+                      <field name="x_available_pricelist_ids" widget="many2many_tags"/>
+                      <field name="x_default_sales_pricelist_id"/>
+                    </group>
+                  </group>
+                </page>
+              </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
