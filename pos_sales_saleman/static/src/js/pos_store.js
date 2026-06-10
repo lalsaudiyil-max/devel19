@@ -62,6 +62,23 @@ patch(ProductCard.prototype, {
 
 
 
+	get showPrice(){
+		const product = this.props.product;
+		let originalPrice = product.list_price;
+		if (typeof product.getTaxDetails === "function") {
+        		const taxDetailsOriginal = product.getTaxDetails(originalPrice);
+
+        		originalPrice =
+            		taxDetailsOriginal?.total_included || originalPrice;
+
+        		
+    		}
+		return 	originalPriceFormatted:
+            		this.env.utils.formatCurrency(originalPrice);
+		
+
+	},
+	
 	get discountData() {
   		const productD =
    	 		this.pos.models["product.template"]
