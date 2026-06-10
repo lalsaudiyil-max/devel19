@@ -16,7 +16,7 @@
     <!-- BADGE (kept outside flow but NOT overlapping text) -->
     <t t-if="discount_info and discount_info.hasDiscount">
         <div class="position-absolute top-0 end-0 m-1">
-            <span class="badge rounded-circle bg-danger"
+            <span class="badge rounded-circle bg-danger">
                <!--     style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;"> -->
                 -<t t-esc="discount_info.discountPercentage"/>
             </span>
