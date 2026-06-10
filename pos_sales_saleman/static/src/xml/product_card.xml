@@ -5,7 +5,7 @@
 
         <!-- ADD PRICING INSIDE PRODUCT CONTENT -->
         <xpath expr="//div[hasclass('product-content')]" position="replace">
-<div class="position-absolute top-0 end-0 m-1">
+<div class="w-75 p-2">
 <t t-esc="props.product.name"/>
      </div>
     <t t-set="discount_info" t-value="this.discountData"/>
@@ -57,7 +57,7 @@
         <t t-else="">
 
             <div class="btn btn-primary w-100 fw-bold py-1">
-                <t t-esc="discount_info?.originalPriceFormatted || props.product.list_price"/> SR
+                <t t-esc="showPrice"/>
             </div>
 
         </t>
