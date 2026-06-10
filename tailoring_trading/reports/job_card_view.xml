@@ -1,0 +1,62 @@
+<odoo>
+    <template id="report_job_card_view">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="line">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: sans-serif;">
+                        <div class="row border-bottom mb-4">
+                            <div class="col-6">
+                                <h2>Job Card: <span t-field="line.order_id.name"/></h2>
+                                <strong>Date: </strong> <span t-field="line.order_id.create_date" t-options='{"widget": "date"}'/><br/>
+                                <strong>Customer: </strong> <span t-field="line.order_id.partner_id.name"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Master Cutter: </strong> <span t-field="line.order_id.master_id.name"/><br/>
+                                <div t-field="line.order_id.name" t-options="{'widget': 'barcode', 'width': 400, 'height': 80}"/>
+                            </div>
+                        </div>
+
+                        <h3>Garment: <span t-field="line.product_id.name"/></h3>
+                        
+                        <div class="row">
+                            <div class="col-4">
+                                <table class="table table-bordered">
+                                    <thead class="thead-light">
+                                        <tr><th>Metric</th><th>Size</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="line.measurement_ids" t-as="m">
+                                            <tr>
+                                                <td><t t-esc="m.name"/></td>
+                                                <td><strong><t t-esc="m.value"/></strong></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-8">
+                                <div class="row">
+                                    <t t-foreach="line.visual_spec_ids" t-as="spec">
+                                        <div class="col-4 mb-3 text-center">
+                                            <img t-if="spec.image" t-att-src="image_data_uri(spec.image)" 
+                                                 style="max-height: 120px; width: auto; border: 1px solid #eee;"/>
+                                            <div style="font-size: 0.8rem; margin-top: 5px;">
+                                                <t t-esc="spec.spec_id.name"/>:<br/>
+                                                <strong><t t-esc="spec.name"/></strong>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 border-top pt-2">
+                            <p><em>Notes: This garment has been approved for cutting. Fee of 10% calculated.</em></p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

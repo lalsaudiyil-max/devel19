@@ -1,0 +1,14 @@
+<odoo>
+  <record id="division_garments" model="company.division">
+    <field name="name">Garments</field>
+  </record>
+ <record id="division_tools" model="company.division">
+    <field name="name">Tools</field>
+  </record>
+   <record id="division_tailoring" model="company.division">
+    <field name="name">Tailoring</field>
+  </record>
+   <record id="division_mtm" model="company.division">
+    <field name="name">MTM</field>
+  </record>
+</odoo>

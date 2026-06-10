@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_tailoring_pos_invoice">
+    <t t-call="web.basic_layout">
+        <div class="page" style="font-size: 12px; font-family: 'Courier New', Courier, monospace; width: 80mm;">
+            <div class="text-center">
+                <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" style="max-height: 50px;"/>
+                <h4 t-field="res_company.name"/>
+                <p>VAT No: <span t-field="res_company.vat"/></p>
+                <t t-if="docs.amt_invoiced > 0">ORDER ESTIMATE</t>
+    <t t-else="">ORDER ESTIMATE</t>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-6">Order: <span t-field="docs.name"/></div>
+                <div class="col-6 text-right"><span t-field="docs.create_date" t-options='{"widget": "date"}'/></div>
+            </div>
+            <div>Customer: <span t-field="docs.partner_id.name"/></div>
+
+            <hr/>
+
+            <table class="table table-sm" style="width: 100%;">
+                <thead>
+                    <tr class="border-bottom">
+                        <th>Description</th>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="docs.line_ids.filtered(lambda l: not l.parent_line_id)" t-as="line">
+                        <tr>
+                            <td>
+                                <strong t-field="line.product_id.name"/><br/>
+                                <span style="font-size: 10px;">
+                                    Trial: <span t-field="line.date_trial"/><br/>
+                                    Delivery: <span t-field="line.delivery_date"/><br/>
+                                </span>
+                                
+                                
+                                <span style="font-size: 10px;">
+                                     <span t-field="line.fabric_product_id.default_code"/><br/>
+                                     <span t-field="line.fabric_product_id.name"/>
+                                </span>
+                            </td>
+                            <td class="text-right">
+                                <span t-field="line.price_total" t-options='{"widget": "monetary"}'/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-7 text-right">Untaxed:</div>
+                <div class="col-5 text-right"><span t-field="docs.amount_untaxed"/></div>
+            </div>
+            <div class="row">
+                <div class="col-7 text-right">VAT (15%):</div>
+                <div class="col-5 text-right"><span t-field="docs.amount_tax"/></div>
+            </div>
+            <div class="row" style="font-weight: bold; font-size: 14px;">
+                <div class="col-7 text-right">TOTAL:</div>
+                <div class="col-5 text-right"><span t-field="docs.amount_total"/></div>
+            </div>
+
+            <hr/>
+
+            
+            
+            <p class="text-center" style="margin-top: 10px;">Thank you for your visit!</p>
+        </div>
+    </t>
+</template>
+</odoo>

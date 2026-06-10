@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_tailoring_complete" model="ir.ui.view">
+        <field name="name">res.partner.form.tailoring.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_tailoring_orders" type="object" class="oe_stat_button" icon="fa-scissors" invisible="tailoring_order_count == 0">
+                    <field name="tailoring_order_count" widget="statinfo" string="Tailoring"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="Measurements">
+                    <field name="tailoring_measurement_ids">
+                        <list string="History">
+                            <field name="garment_type_id"/>
+                            <field name="date"/>
+                        </list>
+                        <form>
+                            <group>
+                                <field name="garment_type_id"/>
+                                <field name="date"/>
+                            </group>
+                            <field name="measurement_line_ids">
+                                <list editable="bottom">
+                                    <field name="metric_id" domain="[('garment_type_id', '=', parent.garment_type_id)]"/>
+                                    <field name="value"/>
+                                </list>
+                            </field>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

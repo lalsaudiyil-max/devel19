@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_division" model="ir.ui.view">
+        <field name="name">res.partner.form.division.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/group/group[2]/field[@name='lang']" position="after">
+                <field name="division_id" widget="many2many_tags"/>
+            </xpath>
+            <xpath expr="/form//page[@name='internal_notes']" position="after">
+                <page string="Personal" name="res_partner_personal">
+                  <group name="row_column_12">
+                  <group name="row_column_12_left">
+                    <field name="nationality_id"/>
+                    <field name="date_of_birth"/>
+                 </group>
+                 <group name="row_column_12_right">
+                  <field name="age"/>
+                 </group>
+                 </group>
+               </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

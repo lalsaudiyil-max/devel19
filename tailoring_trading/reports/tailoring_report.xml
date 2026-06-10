@@ -1,0 +1,12 @@
+<odoo>
+    <record id="action_report_job_card" model="ir.actions.report">
+        <field name="name">Master Job Card</field>
+        <field name="model">tailoring.order.line</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tailoring_trading_core.report_job_card_view</field>
+        <field name="report_file">tailoring_trading_core.report_job_card_view</field>
+        <field name="print_report_name">'JobCard_%s' % (object.order_id.name)</field>
+        <field name="binding_model_id" ref="model_tailoring_order_line"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

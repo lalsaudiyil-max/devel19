@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tailoring_order,tailoring.order,model_tailoring_order,base.group_user,1,1,1,1
+access_tailoring_order_line,tailoring.order.line,model_tailoring_order_line,base.group_user,1,1,1,1
+access_garment_type,tailoring.garment.type,model_tailoring_garment_type,base.group_user,1,1,1,1
+access_metric_def,tailoring.metric.definition,model_tailoring_metric_definition,base.group_user,1,1,1,1
+access_spec_def,tailoring.spec.definition,model_tailoring_spec_definition,base.group_user,1,1,1,1
+access_spec_val,tailoring.spec.value,model_tailoring_spec_value,base.group_user,1,1,1,1
+access_meas_wizard,tailoring.measurement.wizard,model_tailoring_measurement_wizard,base.group_user,1,1,1,1
+access_meas_wizard_metric,tailoring.measurement.wizard.metric,model_tailoring_measurement_wizard_metric,base.group_user,1,1,1,1
+access_meas_wizard_spec,tailoring.measurement.wizard.spec,model_tailoring_measurement_wizard_spec,base.group_user,1,1,1,1
+access_customer_meas,tailoring.customer.measurement,model_tailoring_customer_measurement,base.group_user,1,1,1,1
+access_customer_meas_line,tailoring.customer.measurement.line,model_tailoring_customer_measurement_line,base.group_user,1,1,1,1
+access_tailoring_line_addon,tailoring.order.line.addon,model_tailoring_order_line_addon,base.group_user,1,1,1,1
+access_tailoring_invoice_wizard,access_tailoring_invoice_wizard,model_tailoring_invoice_wizard,base.group_user,1,0,0,0

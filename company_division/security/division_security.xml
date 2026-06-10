@@ -1,0 +1,5 @@
+<odoo>
+  <record id="group_division_manager" model="res.groups">
+    <field name="name">Division Manager</field>
+  </record>
+</odoo>

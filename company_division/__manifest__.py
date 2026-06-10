@@ -1,0 +1,20 @@
+{
+  'name': 'Division creating in companies',
+  'version': '1.0',
+  'category': 'Accounting',
+  'summary': 'Create a new division in companies so that employees, users, products, partners can be filtered according to the division.Also some additional fields also added like Internal Quality, Partner Nationality etc',
+  'depends': ['base','hr','product','purchase'],
+  'data': [
+    'views/res_user_views.xml',
+    'views/res_partner_views.xml',
+    'views/hr_employee_views.xml',
+    'views/product_views.xml',
+    'security/division_security.xml',
+    'security/ir.model.access.csv',
+    'data/division_data.xml',
+  ],
+  'installable': True,
+  'application': False,
+  'license': 'OEEL-1',
+  'author': 'Anvar Lal',
+}

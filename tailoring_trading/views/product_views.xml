@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_tailoring_root" 
+              name="Tailoring" 
+              web_icon="tailoring_trading,static/description/icon.png" 
+              sequence="10"/>
+
+    <menuitem id="menu_tailoring_config_root" 
+              name="Configuration" 
+              parent="menu_tailoring_root" 
+              sequence="100"/>
+
+    <record id="action_tailoring_products" model="ir.actions.act_window">
+        <field name="name">Tailoring Products</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_tailoring', '=', True)]</field>
+        <field name="context">{'default_is_tailoring': True}</field>
+    </record>
+
+    <menuitem id="menu_tailoring_product_list" 
+              name="Garments &amp; Bundles" 
+              parent="menu_tailoring_root" 
+              action="action_tailoring_products" 
+              sequence="20"/>
+
+    <record id="view_product_template_form_tailoring" model="ir.ui.view">
+        <field name="name">product.template.form.tailoring</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inventory']" position="after">
+                <page string="Tailoring Config" name="tailoring_config">
+                    <group>
+                        <group string="Basic Settings">
+                            <field name="is_tailoring"/>
+                            <field name="garment_type_id" 
+                                   invisible="not is_tailoring" 
+                                   required="is_tailoring"/>
+                            <field name="min_price" widget="monetary"/>
+                        </group>
+                        <group string="Bundle Settings">
+                            <field name="is_bundle"/>
+                            <field name="constituent_ids" 
+                                   widget="many2many_tags" 
+                                   invisible="not is_bundle" 
+                                   required="is_bundle"
+                                   domain="[('is_tailoring', '=', True), ('is_bundle', '=', False)]"/> </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

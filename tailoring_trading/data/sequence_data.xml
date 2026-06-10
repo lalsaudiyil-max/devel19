@@ -1,0 +1,11 @@
+<odoo>
+    <data noupdate="1">
+        <record id="seq_tailoring_order" model="ir.sequence">
+            <field name="name">Tailoring Order Sequence</field>
+            <field name="code">tailoring.order</field>
+            <field name="prefix">TO/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>
