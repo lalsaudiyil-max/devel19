@@ -12,7 +12,47 @@ import { usePos } from "@point_of_sale/app/hooks/pos_hook";
 import { Orderline } from "@point_of_sale/app/components/orderline/orderline";
 
 import { ProductCard } from "@point_of_sale/app/components/product_card/product_card";
+import { numberBufferService } from "@point_of_sale/app/services/number_buffer_service";
 
+const originalStart = numberBufferService.start;
+
+numberBufferService.start = function (env, deps) {
+    const buffer = originalStart.call(this, env, deps);
+	
+    patch(buffer, {
+        _handleInput(key) {
+				
+
+            const pos = window.posmodel;
+			const isNumeric = /^[0-9.]$/.test(key);
+			const line =
+            pos.getOrder()?.getSelectedOrderline?.();
+			//console.log(pos.numpadMode);	
+			
+            if (
+                pos &&
+                ["price", "discount"].includes(pos.numpadMode) &&
+                ["Backspace", "Delete", "-"].includes(key)
+            ) {
+				
+                return;
+            }
+			if(isNumeric && line ){
+       if(line.ui_mode === "price" && line.product_id.lst_price > 0 ){
+		   line.price_unit= line.product_id.lst_price + line.price_extra;
+		  return ;
+	   }
+		  if(line.ui_mode === "discount" && line.ui_discount > 0 ){
+			  line.discount=line.ui_discount;
+		     return ;
+	   }
+			}
+            return super._handleInput(key);
+        },
+    });
+
+    return buffer;
+};
 
 patch(ProductCard.prototype, {
     setup() {
@@ -34,71 +74,49 @@ patch(ProductCard.prototype, {
         	return null;
     	}
 		const productLimit=productD?.discount_limit;
-		let originalPrice = product.list_price;
+		
+
+    	let originalPrice = product.list_price;
+    	//let currentPrice = product.getPrice
+        //	? product.getPrice(this.pos.config.pricelist, 1)
+        //	: originalPrice;
 		let currentPrice = product.getPrice(this.pos.config.pricelist_id, 1) ;
 		
 
-    	let hasDiscount = false;
-		let discountPercentage = 0;
+    	if (originalPrice > currentPrice && currentPrice > 0) {
+        	const discountPercentage =
+            	((originalPrice - currentPrice) / originalPrice) * 100;
+			
+			
+        	if (typeof product.getTaxDetails === "function") {
+            	const taxDetailsOriginal =
+                	product.getTaxDetails(originalPrice);
+            	originalPrice =
+                	taxDetailsOriginal?.total_included || originalPrice;
+				
+				
 
-		if (originalPrice > currentPrice && currentPrice > 0) {
-    		hasDiscount = true;
 
-    		discountPercentage =
-        		((originalPrice - currentPrice) / originalPrice) * 100;
+            	
+            	currentPrice= currentPrice * originalPrice/product.list_price;
+				
+				
+				
+				
+        	}
 
-    		if (typeof product.getTaxDetails === "function") {
-        		const taxDetailsOriginal = product.getTaxDetails(originalPrice);
+        	return {
+            	originalPriceFormatted:
+                	this.env.utils.formatCurrency(originalPrice),
+            	currentPriceFormatted:
+                	this.env.utils.formatCurrency(currentPrice),
+            	discountPercentage:
+                	Math.round(discountPercentage) + "%",
+            	hasDiscount: true,
+        	};
+    	}
 
-        		originalPrice =
-            		taxDetailsOriginal?.total_included || originalPrice;
-
-        		currentPrice =
-            		currentPrice * originalPrice / product.list_price;
-    		}
-
-    		return {
-        		originalPriceFormatted:
-            		this.env.utils.formatCurrency(originalPrice),
-
-        		currentPriceFormatted:
-            		this.env.utils.formatCurrency(currentPrice),
-
-        		discountPercentage:
-            		Math.round(discountPercentage) + "%",
-
-        		hasDiscount: true,
-
-        		showDiscountLimit: false,
-    		};
-		}
-
-		// No active discount
-		if (productLimit > 0) {
-
-    		let listPrice = product.list_price;
-
-    		if (typeof product.getTaxDetails === "function") {
-        		const taxDetails = product.getTaxDetails(listPrice);
-        		listPrice = taxDetails?.total_included || listPrice;
-    		}
-
-    		return {
-        		originalPriceFormatted:
-            		this.env.utils.formatCurrency(listPrice),
-
-        		currentPriceFormatted:
-            		this.env.utils.formatCurrency(listPrice),
-
-        		discountLimit: productLimit,
-
-        		hasDiscount: false,
-
-        		showDiscountLimit: true,
-    		};
-		}
-
-		return null;
+    	return null;
 	}
 });
 
@@ -110,6 +128,7 @@ patch(ProductScreen.prototype, {
 
         const line =
             this.currentOrder?.getSelectedOrderline?.();
+		
         const isNumeric =
         /^[0-9.]$/.test(buttonValue);
         // store current UI mode
@@ -124,7 +143,18 @@ patch(ProductScreen.prototype, {
 
             
         }
+		 
 		 if(isNumeric){
+       if(line.ui_mode === "price" && line.product_id.lst_price > 0 ){
+		   line.price_unit= line.product_id.lst_price + line.price_extra;
+		  return ;
+	   }
+		  if(line.ui_mode === "discount" && line.ui_discount > 0 ){
+			  line.discount=line.ui_discount;
+		     return ;
+	   }
+		 }
+		 if(buttonValue === "Backspace" || buttonValue === "-" || buttonValue === "Delete"){
        if(line.ui_mode === "price" && line.product_id.lst_price > 0 ){
 		   line.price_unit= line.product_id.lst_price + line.price_extra;
 		  return ;
