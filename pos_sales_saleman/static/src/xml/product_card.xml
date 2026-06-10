@@ -4,8 +4,10 @@
     <t t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
 
         <!-- ADD PRICING INSIDE PRODUCT CONTENT -->
-        <xpath expr="//div[hasclass('product-content')]" position="inside">
-
+        <xpath expr="//div[hasclass('product-content')]" position="replace">
+<div class="position-absolute top-0 end-0 m-1">
+<t t-esc="props.product.name"/>
+     </div>
     <t t-set="discount_info" t-value="this.discountData"/>
 
     <!-- NAME MUST ALWAYS BE FIRST AND ALWAYS VISIBLE -->
@@ -39,13 +41,13 @@
                     <t t-esc="discount_info.originalPriceFormatted"/>
                 </div>
 
-                <div class="discount-price">
+                <div class="btn btn-primary w-100 fw-bold py-1">
                     <t t-esc="discount_info.currentPriceFormatted"/>
                 </div>
             </t>
 
             <t t-elif="discount_info.showDiscountLimit">
-                <div class="discount-price">
+                <div class="btn btn-primary w-100 fw-bold py-1">
                     <t t-esc="discount_info.originalPriceFormatted"/>
                 </div>
             </t>
@@ -55,7 +57,7 @@
         <t t-else="">
 
             <div class="btn btn-primary w-100 fw-bold py-1">
-                <t t-esc="discount_info?.originalPriceFormatted || props.product.list_price"/>SR
+                <t t-esc="discount_info?.originalPriceFormatted || props.product.list_price"/> SR
             </div>
 
         </t>
