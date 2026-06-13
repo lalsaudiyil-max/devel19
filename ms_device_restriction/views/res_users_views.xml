@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_users_form_inherit_device_gatekeeper" model="ir.ui.view">
+            <field name="name">res.users.form.inherit.device.gatekeeper</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='access_rights']" position="inside">
+                    <group string="Hardware Gatekeeper Security">
+                        <field name="enable_device_restriction" string="Enforce Hardware Restriction"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

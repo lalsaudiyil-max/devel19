@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="login_hardware_injector" model="ir.ui.view">
+            <field name="name">web.login.hardware.injector</field>
+            <field name="model">ir.ui.view</field>
+            <field name="inherit_id" ref="web.login"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('field-login')]" position="before">
+                    <input type="hidden" name="hardware_uuid" id="forced_hw_uuid" value="pending-js-eval"/>
+                    <input type="hidden" name="computer_name" id="forced_comp_name" value="pending-js-eval"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_users_device_form" model="ir.ui.view">
+            <field name="name">res.users.device.form</field>
+            <field name="model">res.users.device</field>
+            <field name="arch" type="xml">
+                <form string="Hardware Profile Details">
+                    <header>
+                        <button name="action_approve" type="object" string="Authorize Device" class="btn-success" invisible="state == 'approved'"/>
+                        <button name="action_block" type="object" string="Block / Restrict Device" class="btn-danger" invisible="state == 'blocked'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="pending,approved,blocked"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="computer_name"/>
+                            <h1><field name="computer_name"/></h1>
+                        </div>
+                        <group>
+                            <group string="Ownership Link">
+                                <field name="user_id" readonly="state == 'blocked'"/>
+                                <field name="last_login"/>
+                            </group>
+                            <group string="Hardware Authentication Identity">
+                                <field name="hardware_uuid" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_users_device_tree" model="ir.ui.view">
+            <field name="name">res.users.device.list</field>
+            <field name="model">res.users.device</field>
+            <field name="arch" type="xml">
+                <list decoration-info="state == 'pending'" decoration-success="state == 'approved'" decoration-danger="state == 'blocked'">
+                    <field name="computer_name"/>
+                    <field name="user_id"/>
+                    <field name="hardware_uuid"/>
+                    <field name="last_login"/>
+                    <field name="state" widget="badge" decoration-info="state == 'pending'" decoration-success="state == 'approved'" decoration-danger="state == 'blocked'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_hardware_gatekeeper_devices" model="ir.actions.act_window">
+            <field name="name">Hardware Guard Gate</field>
+            <field name="res_model">res.users.device</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">No device access logs discovered.</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_hardware_gatekeeper_root" name="Hardware Security" parent="base.menu_administration" sequence="100"/>
+        <menuitem id="menu_hardware_gatekeeper_devices" name="Device Whitelist Management" parent="menu_hardware_gatekeeper_root" action="action_hardware_gatekeeper_devices" sequence="10"/>
+
+       
+
+    </data>
+</odoo>
